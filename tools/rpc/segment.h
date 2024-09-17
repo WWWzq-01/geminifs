@@ -1,0 +1,4 @@
+#ifndef __DIS_NVM_EXAMPLES_SEGMENT_H__
+#define __DIS_NVM_EXAMPLES_SEGMENT_H__
+
+#endif // __DIS_NVM_EXAMPLES_SEGMENT_H__

@@ -1,0 +1,224 @@
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7f1d60010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2918.4	Number of Ops: 4194304	Data Size (bytes): 17179869184
+Ops/sec: 1.43719e+09	Effective Bandwidth(GB/S): 5482.46
+Run test success, num_reqs=1024
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7ff846010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2936.83	Number of Ops: 8388608	Data Size (bytes): 34359738368
+Ops/sec: 2.85635e+09	Effective Bandwidth(GB/S): 10896.1
+Run test success, num_reqs=2048
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7f59e8010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2965.5	Number of Ops: 16777216	Data Size (bytes): 68719476736
+Ops/sec: 5.65746e+09	Effective Bandwidth(GB/S): 21581.5
+Run test success, num_reqs=4096
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7fe320010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2931.71	Number of Ops: 33554432	Data Size (bytes): 137438953472
+Ops/sec: 1.14453e+10	Effective Bandwidth(GB/S): 43660.5
+Run test success, num_reqs=8192
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7f1144010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2945.02	Number of Ops: 67108864	Data Size (bytes): 274877906944
+Ops/sec: 2.27872e+10	Effective Bandwidth(GB/S): 86926.3
+Run test success, num_reqs=16384
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7fe212010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2966.53	Number of Ops: 134217728	Data Size (bytes): 549755813888
+Ops/sec: 4.5244e+10	Effective Bandwidth(GB/S): 172592
+Run test success, num_reqs=32768
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7f7a54010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2987.01	Number of Ops: 268435456	Data Size (bytes): 1099511627776
+Ops/sec: 8.98677e+10	Effective Bandwidth(GB/S): 342818
+Run test success, num_reqs=65536
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7f62e2010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2950.14	Number of Ops: 536870912	Data Size (bytes): 2199023255552
+Ops/sec: 1.81981e+11	Effective Bandwidth(GB/S): 694203
+Run test success, num_reqs=131072
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7fb672010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2942.98	Number of Ops: 1073741824	Data Size (bytes): 4398046511104
+Ops/sec: 3.64849e+11	Effective Bandwidth(GB/S): 1.39179e+06
+Run test success, num_reqs=262144
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7fc5d6010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 3010.56	Number of Ops: 2147483648	Data Size (bytes): 8796093022208
+Ops/sec: 7.13317e+11	Effective Bandwidth(GB/S): 2.72109e+06
+Run test success, num_reqs=524288
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7f5f84010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2961.41	Number of Ops: 4294967296	Data Size (bytes): 17592186044416
+Ops/sec: 1.45031e+12	Effective Bandwidth(GB/S): 5.5325e+06
+Run test success, num_reqs=1048576
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7f9c38010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2950.14	Number of Ops: 8589934592	Data Size (bytes): 35184372088832
+Ops/sec: 2.9117e+12	Effective Bandwidth(GB/S): 1.11073e+07
+Run test success, num_reqs=2097152
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7efef8010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2953.22	Number of Ops: 17179869184	Data Size (bytes): 70368744177664
+Ops/sec: 5.81734e+12	Effective Bandwidth(GB/S): 2.21914e+07
+Run test success, num_reqs=4194304
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7feb9a010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2939.9	Number of Ops: 34359738368	Data Size (bytes): 140737488355328
+Ops/sec: 1.16874e+13	Effective Bandwidth(GB/S): 4.45838e+07
+Run test success, num_reqs=8388608
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7f9248010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2951.17	Number of Ops: 68719476736	Data Size (bytes): 281474976710656
+Ops/sec: 2.32855e+13	Effective Bandwidth(GB/S): 8.88272e+07
+Run test success, num_reqs=16777216
+SQs: 135	CQs: 135	n_qps: 128
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7f8b68010000	e0020410000
+HEREN
+Cond1
+40000 8 1 40000
+Finish Making Page Cache
+finished creating cache
+0000:E1:00.0
+atlaunch kernel
+Elapsed Time: 2962.43	Number of Ops: 137438953472	Data Size (bytes): 562949953421312
+Ops/sec: 4.6394e+13	Effective Bandwidth(GB/S): 1.76979e+08
+Run test success, num_reqs=33554432

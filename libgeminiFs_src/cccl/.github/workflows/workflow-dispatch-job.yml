@@ -1,0 +1,209 @@
+name: "Workflow/Dispatch/Job"
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -euo pipefail {0}
+
+on:
+  workflow_call:
+    outputs:
+      success:
+        value: ${{ contains(toJSON(jobs.*.outputs.success), 'true') }}
+    inputs:
+      name: {type: string, required: true}
+      image: {type: string, required: true}
+      runner: {type: string, required: true}
+      command: {type: string, required: true}
+      id: {type: string, required: true}
+      env: {type: string, required: false}
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    name: ${{inputs.name}}
+    if: ${{ startsWith(inputs.runner, 'linux') }}
+    outputs:
+      success: ${{ steps.done.outputs.SUCCESS }}
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ${{inputs.runner}}
+    container:
+      options: -u root
+      image: ${{inputs.image}}
+      env:
+        NVIDIA_VISIBLE_DEVICES: ${{ env.NVIDIA_VISIBLE_DEVICES }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          path: ${{github.event.repository.name}}
+          persist-credentials: false
+      - name: Link files to coder user home directory
+        run: |
+          ln -s "$(pwd)/${{github.event.repository.name}}" /home/coder/${{github.event.repository.name}}
+          chown -R coder:coder ${{github.event.repository.name}}
+          chown -R coder:coder /home/coder/${{github.event.repository.name}}
+      - name: Add NVCC problem matcher
+        run: |
+          echo "::add-matcher::${{github.event.repository.name}}/.github/problem-matchers/problem-matcher.json"
+      - name: Get AWS credentials for sccache bucket
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::279114543810:role/gha-oidc-NVIDIA
+          aws-region: us-east-2
+          role-duration-seconds: 43200 # 12 hours)
+      - name: Set environment variables
+        run: |
+          echo "SCCACHE_BUCKET=rapids-sccache-devs" >> $GITHUB_ENV
+          echo "SCCACHE_REGION=us-east-2" >> $GITHUB_ENV
+          echo "SCCACHE_IDLE_TIMEOUT=32768" >> $GITHUB_ENV
+          echo "SCCACHE_S3_USE_SSL=true" >> $GITHUB_ENV
+          echo "SCCACHE_S3_NO_CREDENTIALS=false" >> $GITHUB_ENV
+      - name: Run command # Do not change this step's name, it is checked in parse-job-times.py
+        shell: su coder {0}
+        env:
+          # Dereferencing the command from and env var instead of a GHA input avoids issues with escaping
+          # semicolons and other special characters (e.g. `-arch "60;70;80"`).
+          COMMAND: ${{inputs.command}}
+        run: |
+            set -eo pipefail
+            cd ~/${{github.event.repository.name}}
+            echo -e "\e[1;34mRunning as 'coder' user in $(pwd):\e[0m"
+            echo -e "\e[1;34m${COMMAND}\e[0m"
+            eval "${COMMAND}" || exit_code=$?
+            if [ ! -z "$exit_code" ]; then
+              echo -e "::group::️❗ \e[1;31mInstructions to Reproduce CI Failure Locally\e[0m"
+              echo "::error:: To replicate this failure locally, follow the steps below:"
+              echo "1. Clone the repository, and navigate to the correct branch and commit:"
+              echo "   git clone --branch $GITHUB_REF_NAME --single-branch https://github.com/$GITHUB_REPOSITORY.git && cd $(echo $GITHUB_REPOSITORY | cut -d'/' -f2) && git checkout $GITHUB_SHA"
+              echo ""
+              echo "2. Run the failed command inside the same Docker container used by the CI:"
+              echo "   docker run --rm -it --gpus all --pull=always --volume \$PWD:/repo --workdir /repo ${{ inputs.image }} ${COMMAND}"
+              echo ""
+              echo "For additional information, see:"
+              echo "   - DevContainer Documentation: https://github.com/NVIDIA/cccl/blob/main/.devcontainer/README.md"
+              echo "   - Continuous Integration (CI) Overview: https://github.com/NVIDIA/cccl/blob/main/ci-overview.md"
+              exit $exit_code
+            fi
+      - name: Prepare job artifacts
+        id: done
+        run: |
+          echo "SUCCESS=true" | tee -a "${GITHUB_OUTPUT}"
+
+          result_dir="jobs/${{inputs.id}}"
+          mkdir -p "$result_dir"
+
+          touch "$result_dir/success"
+
+          # Finds a matching file in the repo directory and copies it to the results directory.
+          find_and_copy() {
+            filename="$1"
+            filepath="$(find ${{github.event.repository.name}} -name "${filename}" -print -quit)"
+            if [[ -z "$filepath" ]]; then
+              echo "${filename} does not exist in repo directory."
+              return 1
+            fi
+            cp -v "$filepath" "$result_dir"
+          }
+
+          find_and_copy "sccache_stats.json" || true # Ignore failures
+
+          echo "::group::Job artifacts"
+          tree "$result_dir"
+          echo "::endgroup::"
+
+      - name: Upload job artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: jobs
+          path: jobs
+
+
+  windows:
+    name: ${{inputs.name}}
+    if: ${{ startsWith(inputs.runner, 'windows') }}
+    outputs:
+      success: ${{ steps.done.outputs.SUCCESS }}
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ${{inputs.runner}}
+    env:
+      SCCACHE_BUCKET: rapids-sccache-devs
+      SCCACHE_REGION: us-east-2
+      SCCACHE_IDLE_TIMEOUT: 0
+      SCCACHE_S3_USE_SSL: true
+      SCCACHE_S3_NO_CREDENTIALS: false
+    steps:
+      - name: Get AWS credentials for sccache bucket
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::279114543810:role/gha-oidc-NVIDIA
+          aws-region: us-east-2
+          role-duration-seconds: 43200 # 12 hours
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          path: ${{github.event.repository.name}}
+          persist-credentials: false
+      - name: Fetch ${{ inputs.image }}
+        run: docker pull ${{ inputs.image }}
+      - name: Prepare paths for docker
+        id: paths
+        run: |
+          echo "HOST_REPO=${{ github.workspace }}\${{ github.event.repository.name }}".Replace('\', '/') | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          echo "MOUNT_REPO=C:/${{ github.event.repository.name }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          cat $env:GITHUB_OUTPUT
+        shell: powershell
+      - name: Run command # Do not change this step's name, it is checked in parse-job-times.py
+        run: |
+          docker run \
+            --mount type=bind,source="${{steps.paths.outputs.HOST_REPO}}",target="${{steps.paths.outputs.MOUNT_REPO}}" \
+            --workdir "${{steps.paths.outputs.MOUNT_REPO}}" \
+            ${{ inputs.image }} \
+            powershell -c "
+              [System.Environment]::SetEnvironmentVariable('AWS_ACCESS_KEY_ID','${{env.AWS_ACCESS_KEY_ID}}');
+              [System.Environment]::SetEnvironmentVariable('AWS_SECRET_ACCESS_KEY','${{env.AWS_SECRET_ACCESS_KEY}}');
+              [System.Environment]::SetEnvironmentVariable('AWS_SESSION_TOKEN','${{env.AWS_SESSION_TOKEN }}');
+              [System.Environment]::SetEnvironmentVariable('SCCACHE_BUCKET','${{env.SCCACHE_BUCKET}}');
+              [System.Environment]::SetEnvironmentVariable('SCCACHE_REGION','${{env.SCCACHE_REGION}}');
+              [System.Environment]::SetEnvironmentVariable('SCCACHE_IDLE_TIMEOUT','${{env.SCCACHE_IDLE_TIMEOUT}}');
+              [System.Environment]::SetEnvironmentVariable('SCCACHE_S3_USE_SSL','${{env.SCCACHE_S3_USE_SSL}}');
+              [System.Environment]::SetEnvironmentVariable('SCCACHE_S3_NO_CREDENTIALS','${{env.SCCACHE_S3_NO_CREDENTIALS}}');
+              git config --global --add safe.directory '${{steps.paths.outputs.MOUNT_REPO}}';
+              ${{inputs.command}}"
+      - name: Prepare job artifacts
+        id: done
+        run: |
+          echo "SUCCESS=true" | tee -a "${GITHUB_OUTPUT}"
+
+          result_dir="jobs/${{inputs.id}}"
+          mkdir -p "$result_dir"
+
+          touch "$result_dir/success"
+
+          # Finds a matching file in the repo directory and copies it to the results directory.
+          find_and_copy() {
+            filename="$1"
+            filepath="$(find ${{github.event.repository.name}} -name "${filename}" -print -quit)"
+            if [[ -z "$filepath" ]]; then
+              echo "${filename} does not exist in repo directory."
+              return 1
+            fi
+            cp -v "$filepath" "$result_dir"
+          }
+
+          find_and_copy "sccache_stats.json" || true # Ignore failures
+
+          echo "::group::Job artifacts"
+          find "$result_dir" # Tree not available in this image.
+          echo "::endgroup::"
+
+      - name: Upload job artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: jobs
+          path: jobs
