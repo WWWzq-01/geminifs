@@ -1,0 +1,10 @@
+build**/
+*.o.d
+*.ko
+*.mod.c
+*.order
+*.symvers
+*.cmd   
+*.o
+*.a
+*.exe
