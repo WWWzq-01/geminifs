@@ -71,11 +71,12 @@ Building the Project
 From the project root directory, do the following:
 ```
 $ git submodule update --init --recursive
-$ mkdir -p build; cd build
-$ cmake ..                            
-$ make tools                          # builds test tools
-$ make libnvm                        # builds library
-$ make benchmarks                     # builds benchmark program
+$ mkdir -p build && cd build
+$ cmake ..
+$ make libnvm                        # builds library 
+$ make integrity                     # builds integrity test 
+$ cd ../lib && make
+$ cp libgeminiFs.a ../build/lib/   
 ```
 
 The CMake configuration is _supposed to_ autodetect the location of CUDA, 
