@@ -33,6 +33,7 @@ snvme-objs := nvfs-pci.o nvfs-p2p.o list.o ctrl.o map.o pci.o
 
 # KERNEL_SRC := /home/qs/linux-5.15/linux
 KERNEL_SRC := /lib/modules/$(shell uname -r)/build
+ccflags-y += -I/usr/src/linux-5.15.20
 # /lib/modules/$(shell uname -r)/build/
 # nvme-core-y	:= core.o ioctl.o multipath.o
 # nvme-y := pci.o

@@ -75,8 +75,12 @@ $ mkdir -p build && cd build
 $ cmake ..
 $ make libnvm                        # builds library 
 $ make integrity                     # builds integrity test 
-$ cd ../lib && make
+$ cd ../libgeminiFs_src && make
 $ cp libgeminiFs.a ../build/lib/   
+```
+or
+```
+bash build.sh
 ```
 
 The CMake configuration is _supposed to_ autodetect the location of CUDA, 

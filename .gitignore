@@ -8,3 +8,4 @@ build**/
 *.o
 *.a
 *.exe
+*.mod

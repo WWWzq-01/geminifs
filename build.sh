@@ -2,9 +2,12 @@
 
 
 # 1. For libnvm.so
-#mkdir -p build
-#cd build
-#cmake ..
+mkdir -p build && cd build
+cmake ..
+make clean
+make libnvm  
+make integrity   
+cd .. 
 #make -j
 #make bench_test -j
 #cd ..
@@ -16,8 +19,13 @@ make -j
 cd ..
 cp libgeminiFs_src/libgeminiFs.a ./build/lib
 
-
 # 3. For examples
 cd examples
 make clean
 make -j CXXFLAGS="-DNR_WARPS=96 -DNR_ACQUIRE_PAGES=4 -DNR_PAGES__PER_WARP=512"
+cd ..
+
+# 4. For SNVMe
+cd kernel_module/nvme/host
+make clean
+make -j
