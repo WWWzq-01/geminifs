@@ -1,17 +1,18 @@
 #!/bin/bash  
   
 # Check if nvme and snvme devices exist  
-if ls /dev/ | grep -q "nvme0n1" && ls /dev/ | grep -q "snvme"; then  
+if ls /dev/ | grep -q "nvme2n1" && ls /dev/ | grep -q "snvme"; then  
     echo "Both nvme and snvme devices detected. Running unreg_nvme script..."  
     ./nvme_unreg /dev/snvm_control 0
     echo "Running nvme_module_change.sh with reload option..."  
     ./nvme_module_change.sh reload  
-elif ls /dev/ | grep -q "nvme0n1" && ! ls /dev/ | grep -q "snvme"; then  
+elif ls /dev/ | grep -q "nvme2n1" && ! ls /dev/ | grep -q "snvme"; then  
     echo "Detected nvme device, but no snvme device detected."  
       
     # Get a list of nvme devices  
-    nvme_devices=$(ls /dev/nvme*n1)  
-      
+    # nvme_devices=$(ls /dev/nvme*n1)  
+    nvme_devices="/dev/nvme2n1"
+
     for device in $nvme_devices; do  
         # Check if the device is mounted  
         mount | grep -q "$device"  

@@ -88,3 +88,38 @@ Nvidia driver and project library. CUDA is located by the _FindCUDA_ package for
 CMake, while the location of both the Nvidia driver can be manually
 set by overriding the `NVIDIA` defines for CMake 
 (`cmake .. -DNVIDIA=/usr/src/nvidia-550.54.15/`).
+
+### Loading/Unloading the Kernel Module
+List the NVMe drives on the machine (avoid selecting the system disk):
+```
+$ lsblk
+# or
+$ sudo nvme list
+```
+
+Identify the PCI address of the drive you want to detach:
+```
+$ lspci | grep Non-Volatile 
+# or
+$ sudo nvme list-subsys
+```
+
+Example output:
+```
+nvme-subsys0 - NQN=nqn.2021-03.com.intel:BTAC112200MP3P8AGN
+ +- nvme0 pcie 0000:65:00.0 live
+nvme-subsys1 - NQN=nqn.2022-08.com.intel:PHAO235601QP1P9EGN
+ +- nvme1 pcie 0000:66:00.0 live
+nvme-subsys2 - NQN=nqn.2022-08.com.intel:PHAO235601QH1P9EGN
+ +- nvme2 pcie 0000:67:00.0 live
+nvme-subsys3 - NQN=nqn.2022-08.com.intel:PHAO235601ZF1P9EGN
+ +- nvme3 pcie 0000:68:00.0 live
+```
+
+To unbind `nvme2` from the NVMe driver :
+```
+# unbind
+echo -n "0000:67:00.0" > /sys/bus/pci/devices/0000:67:00.0/driver/unbind
+# bind
+echo -n "0000:67:00.0" > /sys/bus/pci/drivers/nvme/bind
+```

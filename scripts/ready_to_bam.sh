@@ -1,7 +1,7 @@
 #!/bin/bash  
   
 # 定义PCI地址  
-PCI_ADDRESS="0000:63:00.0"  
+PCI_ADDRESS="0000:67:00.0"  
   
 # 检查参数  
 if [ "$#" -ne 1 ]; then  
